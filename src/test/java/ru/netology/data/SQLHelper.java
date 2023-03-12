@@ -34,9 +34,9 @@ public class SQLHelper {
     @SneakyThrows
     public static void cleanDataBase() {
         var connection = getConn();
-        runner.execute("DELETE FROM auth_codes");
-        runner.execute("DELETE FROM card_transactions");
-        runner.execute("DELETE FROM cards");
-        runner.execute("DELETE FROM users");
+        runner.execute(connection,"DELETE FROM auth_codes");
+        runner.execute(connection,"DELETE FROM card_transactions");
+        runner.execute(connection,"DELETE FROM cards");
+        runner.execute(connection,"DELETE FROM users");
     }
 }

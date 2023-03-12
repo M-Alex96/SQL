@@ -1,12 +1,11 @@
 package ru.netology.test;
 
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
 import ru.netology.data.SQLHelper;
-import ru.netology.pageObject.LoginPage;
-import ru.netology.pageObject.VerificationPage;
+import ru.netology.page.LoginPage;
+
 
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.data.SQLHelper.cleanDataBase;
@@ -20,27 +19,27 @@ public class LoginTest {
 
     @Test
     void shouldLogin() {
-        open("http://localhost:9999", LoginPage.class);
+        var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfo();
-        var verificationPage = LoginPage.validLogin (authInfo);
-        VerificationPage.verifyVerificationPageVisibility ();
+        var verificationPage = loginPage.validLogin (authInfo);
+        verificationPage.verifyVerificationPageVisibility ();
         var verificationCode = SQLHelper.getVerificationCode();
         verificationPage.validVerify(verificationCode.getCode());
     }
 
     @Test
     void shouldGetErrorIfUserNotExist () {
-        open("http://localhost:9999", LoginPage.class);
+        var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.generateRandomUser();
-        LoginPage.validLogin (authInfo);
-        LoginPage.verifyErrorNotificationVisibility();
+        loginPage.validLogin (authInfo);
+        loginPage.verifyErrorNotificationVisibility();
     }
 
     @Test
     void shouldGetErrorIfVerificationCodeIsWrong () {
-        open("http://localhost:9999", LoginPage.class);
+        var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfo();
-        var verificationPage = LoginPage.validLogin (authInfo);
+        var verificationPage = loginPage.validLogin (authInfo);
         verificationPage.verifyVerificationPageVisibility();
         var verificationCode = DataHelper.generateRandomVerificationCode();
         verificationPage.verify(verificationCode.getCode());
